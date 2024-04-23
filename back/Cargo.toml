@@ -1,7 +1,7 @@
 [package]
-name = "ffxiv-local-finder-backend-api"
+name = "xivif_api"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
@@ -9,3 +9,7 @@ name = "webapi_mvp"
 path = "src/lib.rs"
 
 [dependencies]
+tokio = { version = "1.21.2", features = ["macros", "rt-multi-thread"] }
+actix-web = "4"
+serenity = "0.12.1"
+xivapi-rust = { git = "https://github.com/carbuncle-ffxiv/xivapi-rust", version = "0.1.0" }
