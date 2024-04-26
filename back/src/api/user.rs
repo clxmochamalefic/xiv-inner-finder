@@ -1,7 +1,24 @@
 use actix_web::{get, HttpResponse, Responder};
-use xivapi_rust::XIVClient;
+use serde_json::value::Value as SerdeValue;
+use xivapi_rust::{Language, XIVClient};
+
+use crate::store::secrets::Secrets;
 
 #[get("/user")]
-async fn index() -> impl Responder {
-    Ok(HttpResponse::Ok().json("Hello world"))
+pub async fn index() -> impl Responder {
+    let secrets = Secrets::new();
+    let client = XIVClient::new(
+        secrets.get_secret("xivapi_secret"),
+        Language::Japanese,
+        Some(true),
+        Some(true),
+        Some(true),
+    );
+    let character: SerdeValue = client
+        .character()
+        .search("Cocoalix Mochamalefic", Some("Atomos"), Some(1))
+        .await
+        .unwrap();
+    let json: &str = character.as_str().unwrap();
+    HttpResponse::Ok().json(json)
 }
