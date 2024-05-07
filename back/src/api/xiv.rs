@@ -1,11 +1,30 @@
 use actix_web::{get, HttpResponse, Responder};
+use reqwest;
 use serde_json::value::Value as SerdeValue;
 use xivapi_rust::{Language, XIVClient};
 
 use crate::store::secrets::Secrets;
 
-#[get("/user")]
-pub async fn index() -> impl Responder {
+const BASEURL: &str = "https://xivapi.com/";
+const BASIC_INFO_PATH: &str = "item/1675";
+
+#[get("/xiv/info")]
+pub async fn xiv_info() -> impl Responder {
+    println!("=== info ===");
+    let secrets = Secrets::new();
+    let secret = secrets.get_secret("xivapi_secret");
+
+    let uri = format!(
+        "{}{}?{}{}",
+        BASEURL, BASIC_INFO_PATH, "private_key=", secret
+    );
+    let json: String = reqwest::get(&uri).await.unwrap().text().await.unwrap();
+
+    HttpResponse::Ok().json(json)
+}
+
+#[get("/xiv/user")]
+pub async fn xiv_user() -> impl Responder {
     println!("=== index ===");
     let secrets = Secrets::new();
     let client = XIVClient::new(

@@ -3,7 +3,7 @@ use actix_web::{get, web, App, HttpServer, Responder};
 mod api;
 mod store;
 use crate::api::auth::login;
-use crate::api::user::index as user_index;
+use crate::api::xiv::*;
 
 #[get("/")]
 async fn root() -> impl Responder {
@@ -23,7 +23,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(root)
             .service(greet)
-            .service(user_index)
+            .service(xiv_info)
+            .service(xiv_user)
             .service(login)
     })
     .bind(("127.0.0.1", 8080))?

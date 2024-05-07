@@ -7,9 +7,11 @@ pub struct Secrets {
 
 impl Secrets {
     pub fn new() -> Secrets {
-        let p: &str = "../secrets.key";
-        let kp = Path::new(p);
-        let loaded_secrets = SecretsManager::load("secrets.json", KeySource::Path(kp))
+        let secret_path_str: &str = "secrets.key";
+        let secret_path = Path::new(secret_path_str);
+        let json_path_str: &str = "secrets.json";
+        let json_path = Path::new(json_path_str);
+        let loaded_secrets = SecretsManager::load(json_path, KeySource::Path(secret_path))
             .expect("Failed to load secrets store!");
         Secrets {
             sman: loaded_secrets,
